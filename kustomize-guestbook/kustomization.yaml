@@ -1,7 +1,17 @@
-namePrefix: kustomize-
-
-resources:
-- guestbook-ui-deployment.yaml
-- guestbook-ui-svc.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: argo-test
+
+# nameSuffix: -geba
+#namePrefix: dev-
+
+
+commonLabels:
+  app: guestbook-ui
+  # version: v1
+  # env: dev
+
+resources:
+# - guestbook-ui-deployment.yaml
+- guestbook-ui-rollout.yaml
+- guestbook-ui-svc.yaml

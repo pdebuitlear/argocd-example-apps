@@ -7,7 +7,7 @@ This example demonstrates how to implement blue-green deployment via [Argo Rollo
 2. Create a sample application and sync it.
 
 ```
-argocd app create --name blue-green --repo https://github.com/argoproj/argocd-example-apps --dest-server https://kubernetes.default.svc --dest-namespace default --path blue-green && argocd app sync blue-green
+argocd app create --name blue-green --repo https://github.com/argoproj/argocd-example-apps --dest-server https://kubernetes.default.svc --dest-namespace argo-test --path blue-green && argocd app sync blue-green
 ```
 
 Once the application is synced you can access it using `blue-green-helm-guestbook` service.
@@ -24,7 +24,7 @@ The `ks-guestbook-demo:0.2` is still considered `blue` available only via previe
 4. Promote `ks-guestbook-demo:0.2` to `green` by patching `Rollout` resource:
 
 ```
-argocd app patch-resource blue-green --kind Rollout --resource-name blue-green-helm-guestbook --patch '{ "status": { "verifyingPreview": false } }' --patch-type 'application/merge-patch+json'
+kubectl argo rollouts promote blue-green-helm-guestbook -n argo-test
 ```
 
 This promotes `ks-guestbook-demo:0.2` to `green` status and `Rollout` deletes old replica which runs `ks-guestbook-demo:0.1`.

@@ -1,0 +1,27 @@
+
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: guestbook-ui
+spec:
+  replicas: 2
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: guestbook-ui
+  template:
+    metadata:
+      labels:
+        app: guestbook-ui
+    spec:
+      containers:
+      - name: guestbook-ui
+        image: heptio-images/ks-guestbook-demo:0.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+  strategy:
+    blueGreen:
+      activeService: guestbook-ui-svc-active
+      previewService: guestbook-ui-svc-preview
+      autoPromotionEnabled: false        
